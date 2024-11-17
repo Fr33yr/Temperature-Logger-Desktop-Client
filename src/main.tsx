@@ -3,7 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./App.css";
 
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+
+import { Config, Servers, Logs } from "./pages";
 import { Navigation } from "./components";
+import { ReduxProvider } from "./redux/provider";
 
 function Layout() {
   return (
@@ -25,15 +28,27 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div className="container"><h1>Servers</h1></div>,
+        element: (
+          <div className="container">
+            <Servers />
+          </div>
+        ),
       },
       {
         path: "/logs",
-        element: <div className="container"><h1>Logs</h1></div>,
+        element: (
+          <div className="container">
+            <Logs />
+          </div>
+        ),
       },
       {
         path: "/config",
-        element: <div className="container"><h1>Config</h1></div>,
+        element: (
+          <div className="container">
+            <Config />
+          </div>
+        ),
       },
     ],
   },
@@ -41,6 +56,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ReduxProvider>
+      <RouterProvider router={router} />
+    </ReduxProvider>
   </React.StrictMode>
 );

@@ -1,0 +1,18 @@
+interface ITempLog {
+    tag: string;
+    temperature: number;
+    created_at: Date;
+}
+
+{
+    "Sensor_1":{
+        hour: ITempLog[],
+        day: ITempLog[],
+        week: ITempLog[],
+    },
+    "Sensor_2":{
+        hour: ITempLog[],
+        day: ITempLog[],
+        week: ITempLog[],
+    }
+}
