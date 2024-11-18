@@ -1,0 +1,85 @@
+.title {
+  padding-bottom: 24px;
+}
+
+.addsvbtn{
+    padding: 6px 8px;
+    margin-bottom: 32px;
+}
+
+.emptylistwarning{
+    padding-bottom: 48px;
+}
+
+.formcontainer {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.formcontainer,
+button,
+label,
+input {
+  font-size: 16px;
+}
+
+.serverform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formdivider {
+  margin: 12px 0;
+}
+
+.buttons {
+  margin-top: 36px;
+}
+
+
+.closebtn {
+  border: 2px solid lightcoral;
+  color: lightcoral;
+  border-radius: 4px;
+  padding: 4px 14px;
+  margin-inline: 16px;
+}
+
+.closebtn:hover {
+  cursor: pointer;
+}
+
+.submitbtn {
+  padding: 4px 14px;
+  margin-inline: 16px;
+}
+
+.submitbtn:hover {
+  cursor: pointer;
+}
+
+.submitbtn:disabled {
+  cursor: default;
+  color: gray;
+}
+
+.serverlistitem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0;
+}
+
+.serverlistitem > span {
+  margin: 0;
+  padding: 0;
+}
+
+.serverlistitem > li {
+  margin: 0;
+  padding: 0;
+}

@@ -10,7 +10,13 @@ interface IServersInitialState {
   servers: IServer[];
 }
 
-export const initialServersState = {} as IServersInitialState;
+export const initialServersState = {
+  selectedServer: {
+    name: "",
+    url: ""
+  },
+  servers: []
+} as IServersInitialState;
 
 export const servers = createSlice({
   name: "servers",
@@ -30,6 +36,8 @@ export const servers = createSlice({
       };
     },
     addServer: (state, action: PayloadAction<IServer>) => {
+      console.log(action.payload);
+      
       return {
         ...state,
         servers: [...state.servers, action.payload],
@@ -55,5 +63,5 @@ export const servers = createSlice({
   },
 });
 
-export const { reset } = servers.actions;
+export const { reset, selectServer, addServer, deleteServer } = servers.actions;
 export default servers.reducer;
