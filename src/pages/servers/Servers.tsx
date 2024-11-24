@@ -1,7 +1,19 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
-import { addServer } from "../../redux/features/serversSlice";
-import {exists, BaseDirectory} from '@tauri-apps/plugin-fs'
+import {
+  addServer,
+  IServer,
+  IServersInitialState,
+  loadServerData,
+} from "../../redux/features/serversSlice";
+import {
+  exists,
+  BaseDirectory,
+  create,
+  readFile,
+  writeTextFile,
+} from "@tauri-apps/plugin-fs"
+import {error as logError, debug} from '@tauri-apps/plugin-log'
 
 import "./Server.css";
 
@@ -12,6 +24,41 @@ export default function Servers() {
   );
   const dispatch = useAppDispatch();
 
+
+  async function loadServerList() {
+    try {
+      const fileExists = await exists("servers.json", {
+        baseDir: BaseDirectory.AppData,
+      });
+      if (fileExists) {
+        const file = await readFile("servers.json", {
+          baseDir: BaseDirectory.AppData,
+        });
+  
+        // Decode and parse JSON data
+        const jsonString = new TextDecoder("utf-8").decode(file);
+        const data = JSON.parse(jsonString) as IServersInitialState;
+  
+        // Dispatch parsed data
+        dispatch(loadServerData(data));
+      } else {
+        // Create default file content
+        const defaultData: IServersInitialState = {
+          selectedServer: {name:"", url:""},
+          servers: [],
+        };
+  
+        // Write the default content to the file
+        await writeTextFile("servers.json", JSON.stringify(defaultData), {
+          baseDir: BaseDirectory.AppData,
+        });
+      }
+    } catch (error) {
+      const message = `Error loading server list: ${error}`
+      logError(message);
+    }
+  }
+
   const isServersEmpty = !servers || servers.length <= 0;
 
   return (
@@ -19,14 +66,17 @@ export default function Servers() {
       <h2 className="title">Servers</h2>
       {isServersEmpty && !showForm ? <NonServerExists /> : ""}
       {!showForm && (
-        <button className="addsvbtn" onClick={() => setShowForm(true)}>Add Server</button>
+        <button className="addsvbtn" onClick={() => setShowForm(true)}>
+          Add Server
+        </button>
       )}
-      {!showForm && servers?.map((item) => (
-        <div className="serverlistitem">
-          <span>{item.name}</span>
-          <li>{item.url}</li>
-        </div>
-      ))}
+      {!showForm &&
+        servers?.map((item) => (
+          <div className="serverlistitem">
+            <span>{item.name}</span>
+            <li>{item.url}</li>
+          </div>
+        ))}
       {showForm && <ServerForm />}
     </>
   );
@@ -36,6 +86,7 @@ export default function Servers() {
     return (
       <div className="emptylistwarning">
         <h3>No servers added yet</h3>
+        <button onClick={loadServerList}>LOAD SERVERS</button>
       </div>
     );
   }
@@ -64,10 +115,37 @@ export default function Servers() {
         [name]: value,
       }));
     };
+
+    async function saveServerList() {
+      try {
+        const fileExists = await exists("servers.json", {
+          baseDir: BaseDirectory.AppData,
+        });
+        if (!fileExists) {
+          await create("servers.json", {
+            baseDir: BaseDirectory.AppData,
+          });
+          const contents = JSON.stringify({ selectedServer, servers });
+          await writeTextFile("servers.json", contents, {
+            baseDir: BaseDirectory.AppData,
+          });
+          debug("FILE SAVED!")
+        } else {
+          const contents = JSON.stringify({ selectedServer, servers });
+          await writeTextFile("servers.json", contents, {
+            baseDir: BaseDirectory.AppData,
+          });
+        }
+      } catch (error) {
+        const message = `Error saving json file: ${error}`
+        logError(message)
+      }
+    }
+
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(formData);
       dispatch(addServer(formData));
+      saveServerList();
       setFormData({ name: "", url: "" });
       setShowForm(false);
     };
