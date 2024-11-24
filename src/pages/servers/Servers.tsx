@@ -25,6 +25,16 @@ export default function Servers() {
   );
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const loadData = async () => {
+      await loadServerList();
+    };
+    // Prevent execution if servers list is empty
+    if (servers && servers.length == 0) {
+      loadData()
+    }
+  }, [servers, selectedServer]);
+
   async function loadServerList() {
     const FILE_PATH = `data/servers.json`;
 
@@ -90,7 +100,6 @@ export default function Servers() {
     return (
       <div className="emptylistwarning">
         <h3>No servers added yet</h3>
-        <button onClick={loadServerList}>LOAD SERVERS</button>
       </div>
     );
   }
