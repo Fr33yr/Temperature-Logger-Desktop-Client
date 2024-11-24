@@ -8,6 +8,13 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
-    "fs:default"
+    "log:allow-log",
+    "fs:write-files",
+    "fs:read-files",
+    "fs:allow-exists",
+    {
+      "identifier": "fs:scope",
+      "allow": [{"path": "$APPDATA/*"}]
+    }
   ]
 }
