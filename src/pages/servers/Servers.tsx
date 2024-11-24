@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
 import {
   addServer,
@@ -44,7 +44,7 @@ export default function Servers() {
         // Dispatch parsed data
         dispatch(loadServerData(data));
 
-        debug("File content loaded!")
+        debug("File content loaded!");
       } else {
         // Create default file content
         const defaultData: IServersInitialState = {
@@ -97,6 +97,16 @@ export default function Servers() {
 
   // ServerForm
   function ServerForm() {
+    useEffect(() => {
+      const saveData = async () => {
+        await saveServerList();
+      };
+      // Prevent execution if servers list is empty
+      if (servers && servers.length > 0) {
+        saveData();
+      }
+    }, [selectedServer, servers]);
+
     interface FormState {
       name: string;
       url: string;
@@ -128,13 +138,16 @@ export default function Servers() {
         });
         if (!fileExists) {
           // creates directory
-          await mkdir('data', {baseDir: BaseDirectory.AppData, recursive: true}) 
+          await mkdir("data", {
+            baseDir: BaseDirectory.AppData,
+            recursive: true,
+          });
           //creates file
           await create(FILE_PATH, {
             baseDir: BaseDirectory.AppData,
           });
           const contents = JSON.stringify({ selectedServer, servers });
-          debug(`Saving file content... contents ${contents}`)
+          debug(`Saving file content... contents ${contents}`);
           await writeTextFile(FILE_PATH, contents, {
             baseDir: BaseDirectory.AppData,
           });
@@ -151,10 +164,10 @@ export default function Servers() {
       }
     }
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(addServer(formData));
-      saveServerList();
+      await saveServerList();
       setFormData({ name: "", url: "" });
       setShowForm(false);
     };
