@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface IServer {
+export interface IServer {
   name: string;
   url: string;
 }
 
-interface IServersInitialState {
+export interface IServersInitialState {
   selectedServer: IServer;
   servers: IServer[];
 }
@@ -25,6 +25,17 @@ export const servers = createSlice({
     reset: () => {
       return initialServersState;
     },
+    loadServerData: (state, action: PayloadAction<IServersInitialState>) =>{
+      const {selectedServer, servers} = action.payload
+      if(servers.length === 0 || selectServer.name.length === 0){
+        return
+      }
+      return {
+        ...state,
+        selectedServer,
+        servers
+      }
+    },
     selectServer: (state, action: PayloadAction<IServer>) => {
       const { name, url } = action.payload;
       return {
@@ -36,8 +47,6 @@ export const servers = createSlice({
       };
     },
     addServer: (state, action: PayloadAction<IServer>) => {
-      console.log(action.payload);
-      
       return {
         ...state,
         servers: [...state.servers, action.payload],
@@ -63,5 +72,5 @@ export const servers = createSlice({
   },
 });
 
-export const { reset, selectServer, addServer, deleteServer } = servers.actions;
+export const { reset, selectServer, addServer, deleteServer, loadServerData } = servers.actions;
 export default servers.reducer;

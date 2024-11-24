@@ -12,8 +12,9 @@ import {
   create,
   readFile,
   writeTextFile,
-} from "@tauri-apps/plugin-fs"
-import {error as logError, debug} from '@tauri-apps/plugin-log'
+  mkdir,
+} from "@tauri-apps/plugin-fs";
+import { error as logError, debug } from "@tauri-apps/plugin-log";
 
 import "./Server.css";
 
@@ -24,37 +25,40 @@ export default function Servers() {
   );
   const dispatch = useAppDispatch();
 
-
   async function loadServerList() {
+    const FILE_PATH = `data/servers.json`;
+
     try {
-      const fileExists = await exists("servers.json", {
+      const fileExists = await exists(FILE_PATH, {
         baseDir: BaseDirectory.AppData,
       });
       if (fileExists) {
-        const file = await readFile("servers.json", {
+        const file = await readFile(FILE_PATH, {
           baseDir: BaseDirectory.AppData,
         });
-  
+
         // Decode and parse JSON data
         const jsonString = new TextDecoder("utf-8").decode(file);
         const data = JSON.parse(jsonString) as IServersInitialState;
-  
+
         // Dispatch parsed data
         dispatch(loadServerData(data));
+
+        debug("File content loaded!")
       } else {
         // Create default file content
         const defaultData: IServersInitialState = {
-          selectedServer: {name:"", url:""},
+          selectedServer: { name: "", url: "" },
           servers: [],
         };
-  
+
         // Write the default content to the file
-        await writeTextFile("servers.json", JSON.stringify(defaultData), {
+        await writeTextFile(FILE_PATH, JSON.stringify(defaultData), {
           baseDir: BaseDirectory.AppData,
         });
       }
     } catch (error) {
-      const message = `Error loading server list: ${error}`
+      const message = `Error loading server list: ${error}`;
       logError(message);
     }
   }
@@ -117,28 +121,33 @@ export default function Servers() {
     };
 
     async function saveServerList() {
+      const FILE_PATH = `data/servers.json`;
       try {
-        const fileExists = await exists("servers.json", {
+        const fileExists = await exists(FILE_PATH, {
           baseDir: BaseDirectory.AppData,
         });
         if (!fileExists) {
-          await create("servers.json", {
+          // creates directory
+          await mkdir('data', {baseDir: BaseDirectory.AppData, recursive: true}) 
+          //creates file
+          await create(FILE_PATH, {
             baseDir: BaseDirectory.AppData,
           });
           const contents = JSON.stringify({ selectedServer, servers });
-          await writeTextFile("servers.json", contents, {
+          debug(`Saving file content... contents ${contents}`)
+          await writeTextFile(FILE_PATH, contents, {
             baseDir: BaseDirectory.AppData,
           });
-          debug("FILE SAVED!")
+          debug("FILE SAVED!");
         } else {
           const contents = JSON.stringify({ selectedServer, servers });
-          await writeTextFile("servers.json", contents, {
+          await writeTextFile(FILE_PATH, contents, {
             baseDir: BaseDirectory.AppData,
           });
         }
       } catch (error) {
-        const message = `Error saving json file: ${error}`
-        logError(message)
+        const message = `Error saving json file: ${error}`;
+        logError(message);
       }
     }
 

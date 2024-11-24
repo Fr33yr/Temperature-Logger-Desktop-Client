@@ -12,6 +12,10 @@
     "fs:write-files",
     "fs:read-files",
     "fs:allow-exists",
+    "fs:allow-appdata-write-recursive",
+    "fs:scope-app-recursive",
+    "fs:scope-app",
+    "fs:scope",
     {
       "identifier": "fs:scope",
       "allow": [{"path": "$APPDATA/*"}]
