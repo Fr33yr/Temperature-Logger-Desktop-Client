@@ -52,20 +52,21 @@ export const servers = createSlice({
         servers: [...state.servers, action.payload],
       };
     },
-    deleteServer: (state, action: PayloadAction<String>) => {
-      if (action.payload == state.selectedServer.url) {
+    deleteServer: (state, action: PayloadAction<IServer>) => {
+      const { url } = action.payload;
+      if (url == state.selectedServer.url) {
         return {
           ...state,
           selectedServer: {
             name: "",
             url: "",
           },
-          servers: state.servers.filter((item) => item.url !== action.payload),
+          servers: state.servers.filter((item) => item.url !== url),
         };
       } else {
         return {
           ...state,
-          servers: state.servers.filter((item) => item.url !== action.payload),
+          servers: state.servers.filter((item) => item.url !== url),
         };
       }
     },

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
 import {
   addServer,
+  deleteServer,
   IServer,
   IServersInitialState,
   loadServerData,
+  selectServer,
 } from "../../redux/features/serversSlice";
 import {
   exists,
@@ -31,11 +33,51 @@ export default function Servers() {
     const loadData = async () => {
       await loadServerList();
     };
-    // Prevent execution if servers list is empty
     if (servers && servers.length == 0) {
       loadData();
     }
+  }, []);
+
+  useEffect(() => {
+    const saveData = async () => {
+      await saveServerList();
+    };
+    saveData();
   }, [servers, selectedServer]);
+
+  async function saveServerList() {
+    const FILE_PATH = `data/servers.json`;
+    try {
+      const fileExists = await exists(FILE_PATH, {
+        baseDir: BaseDirectory.AppData,
+      });
+      if (!fileExists) {
+        // creates directory
+        await mkdir("data", {
+          baseDir: BaseDirectory.AppData,
+          recursive: true,
+        });
+        //creates file
+        await create(FILE_PATH, {
+          baseDir: BaseDirectory.AppData,
+        });
+        const contents = JSON.stringify({ selectedServer, servers });
+        debug(`Saving file content... contents ${contents}`);
+        await writeTextFile(FILE_PATH, contents, {
+          baseDir: BaseDirectory.AppData,
+        });
+        debug("FILE SAVED!");
+      } else {
+        const contents = JSON.stringify({ selectedServer, servers });
+        await writeTextFile(FILE_PATH, contents, {
+          baseDir: BaseDirectory.AppData,
+        });
+      }
+    } catch (error) {
+      const message = `Error saving json file: ${error}`;
+      logError(message);
+    }
+  }
 
   async function loadServerList() {
     const FILE_PATH = `data/servers.json`;
@@ -99,7 +141,11 @@ export default function Servers() {
   function ListItem({ name, url }: ListItemProps) {
     return (
       <div className="serverlistitem">
-        <IconButton aria-label="star" color={"primary"}>
+        <IconButton
+          aria-label="star"
+          color={"primary"}
+          onClick={() => dispatch(deleteServer({ name, url }))}
+        >
           <span style={{ color: "white" }}>
             <Delete />
           </span>
@@ -108,10 +154,14 @@ export default function Servers() {
           <span>{name}</span>
           <li>{url}</li>
         </div>
-        <IconButton aria-label="star" color={"primary"}>
+        <IconButton
+          aria-label="star"
+          color={"primary"}
+          onClick={() => dispatch(selectServer({ name, url }))}
+        >
           <span
             style={
-              selectedServer.url == url ? { color: "white"} : { color: "gray"}
+              selectedServer.url == url ? { color: "white" } : { color: "gray" }
             }
           >
             <Star />
@@ -164,40 +214,6 @@ export default function Servers() {
         [name]: value,
       }));
     };
-
-    async function saveServerList() {
-      const FILE_PATH = `data/servers.json`;
-      try {
-        const fileExists = await exists(FILE_PATH, {
-          baseDir: BaseDirectory.AppData,
-        });
-        if (!fileExists) {
-          // creates directory
-          await mkdir("data", {
-            baseDir: BaseDirectory.AppData,
-            recursive: true,
-          });
-          //creates file
-          await create(FILE_PATH, {
-            baseDir: BaseDirectory.AppData,
-          });
-          const contents = JSON.stringify({ selectedServer, servers });
-          debug(`Saving file content... contents ${contents}`);
-          await writeTextFile(FILE_PATH, contents, {
-            baseDir: BaseDirectory.AppData,
-          });
-          debug("FILE SAVED!");
-        } else {
-          const contents = JSON.stringify({ selectedServer, servers });
-          await writeTextFile(FILE_PATH, contents, {
-            baseDir: BaseDirectory.AppData,
-          });
-        }
-      } catch (error) {
-        const message = `Error saving json file: ${error}`;
-        logError(message);
-      }
-    }
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
