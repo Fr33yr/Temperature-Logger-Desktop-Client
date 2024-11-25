@@ -15,6 +15,8 @@ import {
   mkdir,
 } from "@tauri-apps/plugin-fs";
 import { error as logError, debug } from "@tauri-apps/plugin-log";
+import { IconButton } from "@mui/material";
+import { StarOutline, Star, Delete } from "@mui/icons-material";
 
 import "./Server.css";
 
@@ -31,7 +33,7 @@ export default function Servers() {
     };
     // Prevent execution if servers list is empty
     if (servers && servers.length == 0) {
-      loadData()
+      loadData();
     }
   }, [servers, selectedServer]);
 
@@ -85,15 +87,39 @@ export default function Servers() {
         </button>
       )}
       {!showForm &&
-        servers?.map((item) => (
-          <div className="serverlistitem">
-            <span>{item.name}</span>
-            <li>{item.url}</li>
-          </div>
+        servers?.map((item, index) => (
+          <ListItem name={item.name} url={item.url} key={index} />
         ))}
       {showForm && <ServerForm />}
     </>
   );
+
+  // Server list item
+  type ListItemProps = { name: string; url: string };
+  function ListItem({ name, url }: ListItemProps) {
+    return (
+      <div className="serverlistitem">
+        <IconButton aria-label="star" color={"primary"}>
+          <span style={{ color: "white" }}>
+            <Delete />
+          </span>
+        </IconButton>
+        <div className="listItemText">
+          <span>{name}</span>
+          <li>{url}</li>
+        </div>
+        <IconButton aria-label="star" color={"primary"}>
+          <span
+            style={
+              selectedServer.url == url ? { color: "white"} : { color: "gray"}
+            }
+          >
+            <Star />
+          </span>
+        </IconButton>
+      </div>
+    );
+  }
 
   // Empty server list Message
   function NonServerExists() {

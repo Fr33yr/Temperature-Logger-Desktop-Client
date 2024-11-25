@@ -2,13 +2,13 @@
   padding-bottom: 24px;
 }
 
-.addsvbtn{
-    padding: 6px 8px;
-    margin-bottom: 32px;
+.addsvbtn {
+  padding: 6px 8px;
+  margin-bottom: 32px;
 }
 
-.emptylistwarning{
-    padding-bottom: 48px;
+.emptylistwarning {
+  padding-bottom: 48px;
 }
 
 .formcontainer {
@@ -39,7 +39,6 @@ input {
   margin-top: 36px;
 }
 
-
 .closebtn {
   border: 2px solid lightcoral;
   color: lightcoral;
@@ -66,7 +65,13 @@ input {
   color: gray;
 }
 
-.serverlistitem {
+.serverlistitem{
+  display: flex;
+  flex-direction: row;
+  height: 42px;
+}
+
+.listItemText {
   display: flex;
   flex-direction: column;
   justify-content: center;
