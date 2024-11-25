@@ -18,7 +18,13 @@
     "fs:scope",
     {
       "identifier": "fs:scope",
-      "allow": [{"path": "$APPDATA/*"}]
-    }
+      "allow": [
+        {
+          "path": "$APPDATA/*"
+        }
+      ]
+    },
+    "websocket:allow-connect",
+    "websocket:allow-send"
   ]
 }
