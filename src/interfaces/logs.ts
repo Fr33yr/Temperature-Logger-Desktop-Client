@@ -1,7 +1,8 @@
 export interface ITempLog {
-  tag: string;
+  id: number;
+  name: string;
   temperature: number;
-  created_at: Date;
+  created_at: string;
 }
 
 export enum LogTimeRange {
@@ -27,6 +28,4 @@ export interface LogState {
   [sensor: string]: ITempLogIntervals;
 }
 
-export interface LogsInitialState {
-  [sensor: string]: ITempLogIntervals;
-}
+export interface LogsInitialState { hour: [], day: [], week: [], live: [] }
