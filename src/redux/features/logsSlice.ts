@@ -1,12 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { debug } from "@tauri-apps/plugin-log";
 import {
   LogsInitialState,
   ITempLogsWithFlag,
   LogTimeRange,
 } from "../../interfaces/logs";
 
-export const initialLogState = {} as LogsInitialState;
+export const initialLogState = {
+  hour: [],
+  day: [],
+  week: [],
+  live: [],
+} as LogsInitialState;
 
 export const logs = createSlice({
   name: "logs",
@@ -16,37 +21,14 @@ export const logs = createSlice({
       return initialLogState;
     },
     addSensorData: (state, action: PayloadAction<ITempLogsWithFlag>) => {
-      if (action.payload.logs.length && action.payload.logs[0].tag.length) {
-        const tag = action.payload.logs[0].tag; // sensor tag
-        if (state[tag]) {
-          const { logs, flag } = action.payload;
-          switch (flag) {
-            case LogTimeRange.Hour:
-              state[tag] = {
-                ...state[tag],
-                hour: logs,
-              };
-              break;
-            case LogTimeRange.Day:
-              state[tag] = {
-                ...state[tag],
-                day: logs,
-              };
-              break;
-            case LogTimeRange.Week:
-              state[tag] = {
-                ...state[tag],
-                week: logs,
-              };
-              break;
-            case LogTimeRange.Default:
-              break;
-          }
-        }
+      const { logs, flag } = action.payload;
+      debug(`Processing flag:${flag} and payload:${logs}`);
+      
+      return {
+        ...state,
+        [flag.toLocaleLowerCase()]: logs,
       }
     },
-    // TODO: Add 4 reducers 1 for each array (live, hour, day, week). Use the addSensor method as a template.
-    // EXTRA: investigate if its possible to pass an enum and use 1 big reducer instead of creating one for each case.
   },
 });
 
