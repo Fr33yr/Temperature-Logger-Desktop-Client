@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./App.css";
 
@@ -55,9 +54,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <ReduxProvider>
-      <RouterProvider router={router} />
-    </ReduxProvider>
-  </React.StrictMode>
+  <ReduxProvider>
+    <RouterProvider router={router} />
+  </ReduxProvider>
 );
