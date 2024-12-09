@@ -10,12 +10,12 @@ export enum LogTimeRange {
   Hour = "HOUR",
   Day = "DAY",
   Week = "WEEK",
-  Default = ""
+  Default = "",
 }
 
 export interface ITempLogsWithFlag {
-  logs: ITempLog[],
-  flag: LogTimeRange
+  logs: ITempLog[];
+  flag: LogTimeRange;
 }
 
 interface ITempLogIntervals {
@@ -28,4 +28,10 @@ export interface LogState {
   [sensor: string]: ITempLogIntervals;
 }
 
-export interface LogsInitialState { hour: [], day: [], week: [], live: [] }
+export interface LogsInitialState {
+  hour: [];
+  day: [];
+  week: [];
+  live: [];
+  currentLog: [];
+}

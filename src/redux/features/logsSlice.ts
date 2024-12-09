@@ -11,6 +11,7 @@ export const initialLogState = {
   day: [],
   week: [],
   live: [],
+  currentLog: [],
 } as LogsInitialState;
 
 export const logs = createSlice({
@@ -23,14 +24,32 @@ export const logs = createSlice({
     addSensorData: (state, action: PayloadAction<ITempLogsWithFlag>) => {
       const { logs, flag } = action.payload;
       debug(`Processing flag:${flag} and payload:${logs}`);
-      
+      // checking incoming logs to avoid unnecesary re renders
+      if (
+        JSON.stringify(logs) ===
+        JSON.stringify(
+          state[flag.toLocaleLowerCase() as keyof LogsInitialState]
+        )
+      ) {
+        return {
+          ...state,
+          [flag.toLocaleLowerCase()]: logs,
+        };
+      }
       return {
         ...state,
         [flag.toLocaleLowerCase()]: logs,
-      }
+      };
+    },
+    setCurrentLog: (state, action: PayloadAction<LogTimeRange>) => {
+      return {
+        ...state,
+        currentLog:
+          state[action.payload.toLocaleLowerCase() as keyof LogsInitialState],
+      };
     },
   },
 });
 
-export const { reset, addSensorData } = logs.actions;
+export const { reset, addSensorData, setCurrentLog } = logs.actions;
 export default logs.reducer;
