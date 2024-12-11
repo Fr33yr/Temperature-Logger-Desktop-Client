@@ -1,0 +1,15 @@
+.logs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logsButtons{
+    display: flex;
+    flex-direction: row;
+}
+
+.logsButtons, button {
+    margin: 24px 12px;
+    padding: 4px 6px;
+}
