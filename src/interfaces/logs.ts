@@ -29,9 +29,9 @@ export interface LogState {
 }
 
 export interface LogsInitialState {
-  hour: [];
-  day: [];
-  week: [];
-  live: [];
-  currentLog: [];
+  hour: ITempLog[];
+  day: ITempLog[];
+  week: ITempLog[];
+  live: ITempLog[];
+  currentLog: ITempLog[];
 }

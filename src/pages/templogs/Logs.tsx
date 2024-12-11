@@ -33,104 +33,70 @@ export default function Logs() {
   const selectedServer = useAppSelector((state) => state.serversReducer);
   const { currentLog } = useAppSelector((state) => state.logsReducer); // the selected list of log
   const dispatch = useAppDispatch();
-  const Data: ITempLog[] = [
-    {
-      id: 2346,
-      name: "sensor_1",
-      temperature: -27.81,
-      created_at: "2024-10-23T11:47:45.128Z",
-    },
-    {
-      id: 2345,
-      name: "sensor_0",
-      temperature: 7.69,
-      created_at: "2024-10-23T11:47:44.910Z",
-    },
-    {
-      id: 2347,
-      name: "sensor_1",
-      temperature: -28.81,
-      created_at: "2024-10-23T11:47:45.128Z",
-    },
-    {
-      id: 2344,
-      name: "sensor_0",
-      temperature: 5.69,
-      created_at: "2024-10-23T11:47:44.910Z",
-    },
-    {
-      id: 2348,
-      name: "sensor_1",
-      temperature: -28.81,
-      created_at: "2024-10-23T11:47:45.128Z",
-    },
-    {
-      id: 2349,
-      name: "sensor_0",
-      temperature: 5.69,
-      created_at: "2024-10-23T11:47:44.910Z",
-    },
-  ];
 
-  const uniqueNames = Data.reduce<string[]>((accumulator, currentValue) => {
-    if (!accumulator.includes(currentValue.name)) {
-      accumulator.push(currentValue.name);
+  const [chartData, setChartData] = useState<any | null>();
+
+  useEffect(() => {
+    if (currentLog && currentLog.length) {
+      const uniqueNames = currentLog.reduce<string[]>(
+        (accumulator, currentValue) => {
+          if (!accumulator.includes(currentValue.name)) {
+            accumulator.push(currentValue.name);
+          }
+          return accumulator;
+        },
+        []
+      );
+
+      const colors = ["#f3ba2f", "#2a71d0", "#f3ba2f"];
+
+      const DataSets = uniqueNames.map((element, index) => {
+        return {
+          label: element,
+          data: currentLog
+            .filter((log) => log.name == element)
+            .map((d) => d.temperature),
+          backgroundColor: colors[index],
+          borderColor: "black",
+          borderWidth: 1,
+        };
+      });
+
+      setChartData({
+        labels: currentLog.map((data) => {
+          const date = new Date(data.created_at);
+          const formattedDate = `${date
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${date
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")} ${date.getDate().toString().padStart(2, "0")}/${(
+            date.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}`;
+          return formattedDate;
+        }),
+        datasets: DataSets,
+      });
     }
-    return accumulator;
-  }, []);
-
-  const colors = ["#f3ba2f", "#2a71d0", "#f3ba2f"];
-
-  const DataSets = uniqueNames.map((element, index) => {
-    return {
-      label: element,
-      data: Data.filter((log) => log.name == element).map((d) => d.temperature),
-      backgroundColor: colors[index],
-      borderColor: "black",
-      borderWidth: 1,
-    };
-  });
-
-  const [chartData, setChartData] = useState({
-    labels: Data.map((data) => {
-      const date = new Date(data.created_at);
-      const formattedDate = `${date
-        .getHours()
-        .toString()
-        .padStart(2, "0")}:${date
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")} ${date.getDate().toString().padStart(2, "0")}/${(
-        date.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, "0")}`;
-
-      return formattedDate;
-    }),
-    datasets: DataSets,
-  });
-
-  useEffect(()=>{
-    if(currentLog && currentLog.length){
-
-    }
-  },[currentLog])
-  
+  }, [currentLog]);
 
   return (
     <div className="logs">
       <h2 className="title">Logs</h2>
-      <span>{currentLog && JSON.stringify(currentLog)}</span>
-      <Line
-        data={chartData}
-        options={{
-          plugins: {
-            title: { display: true, text: "..." },
-            legend: { display: false },
-          },
-        }}
-      />
+      {chartData && (
+        <Line
+          data={chartData}
+          options={{
+            plugins: {
+              title: { display: true, text: "..." },
+              legend: { display: false },
+            },
+          }}
+        />
+      )}
       <div className="logsButtons">
         <button onClick={() => fetchLogsData(LogTimeRange.Week)}>Week</button>
         <button onClick={() => fetchLogsData(LogTimeRange.Day)}>Day</button>
@@ -154,7 +120,7 @@ export default function Logs() {
         dispatch(addSensorData({ flag: logTimeFrame, logs: data }));
         if (data && Array.isArray(data) && data.length > 0) {
           dispatch(addSensorData({ flag: logTimeFrame, logs: data }));
-          dispatch(setCurrentLog(logTimeFrame))
+          dispatch(setCurrentLog(logTimeFrame));
         } else {
           debug("No valid data received");
         }
