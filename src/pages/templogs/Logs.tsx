@@ -12,9 +12,10 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
-
 import "./Logs.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import WebSocket from "@tauri-apps/plugin-websocket";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
 import { addSensorData, setCurrentLog } from "../../redux/features/logsSlice";
 import { ITempLog, LogTimeRange } from "../../interfaces/logs";
@@ -30,11 +31,47 @@ ChartJS.register(
 );
 
 export default function Logs() {
-  const selectedServer = useAppSelector((state) => state.serversReducer);
+  const { url, name } = useAppSelector(
+    (state) => state.serversReducer.selectedServer
+  );
   const { currentLog } = useAppSelector((state) => state.logsReducer); // the selected list of log
   const dispatch = useAppDispatch();
+  const wsRef = useRef<WebSocket | null>(null);
 
   const [chartData, setChartData] = useState<any | null>();
+
+  useEffect(() => {
+    const connectWebSocket = async () => {
+      debug(`Attempting connection...`)
+      try {
+        // Create the WebSocket connection
+        const ws = await WebSocket.connect(url);
+        wsRef.current = ws;
+        
+        // Add a listener for messages
+        ws.addListener((msg) => {
+          debug(`Received Message: ${JSON.stringify(msg)}`);
+        });
+
+        
+
+        debug(JSON.stringify(`asdasdasdasd ${ws}`))
+      } catch (error) {
+        console.error("WebSocket connection error:", error);
+      }
+    };
+
+    connectWebSocket();
+
+    // Cleanup on component unmount
+    return () => {
+      if (wsRef.current) {
+        wsRef.current
+          .disconnect()
+          .catch((err) => logError("Error disconnecting WebSocket:", err));
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (currentLog && currentLog.length) {
@@ -108,12 +145,9 @@ export default function Logs() {
 
   async function fetchLogsData(logTimeFrame: LogTimeRange) {
     try {
-      const response = await fetch(
-        `${selectedServer.selectedServer.url}templogs`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${url}templogs`, {
+        method: "GET",
+      });
       if (response.ok) {
         const data = await response.json();
         debug("response ok!");
