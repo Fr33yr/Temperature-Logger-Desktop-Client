@@ -18,7 +18,7 @@ import WebSocket from "@tauri-apps/plugin-websocket";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
 import { addSensorData, setCurrentLog } from "../../redux/features/logsSlice";
-import { ITempLog, LogTimeRange } from "../../interfaces/logs";
+import { LogTimeRange } from "../../interfaces/logs";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -31,7 +31,7 @@ ChartJS.register(
 );
 
 export default function Logs() {
-  const { url, name } = useAppSelector(
+  const { url } = useAppSelector(
     (state) => state.serversReducer.selectedServer
   );
   const { currentLog } = useAppSelector((state) => state.logsReducer); // the selected list of log
@@ -122,7 +122,7 @@ export default function Logs() {
 
   return (
     <div className="logs">
-      <h2 className="title">Logs</h2>
+      <h2 className="title">Registros</h2>
       {chartData && (
         <Line
           data={chartData}
@@ -135,9 +135,9 @@ export default function Logs() {
         />
       )}
       <div className="logsButtons">
-        <button onClick={() => fetchLogsData(LogTimeRange.Week)}>Week</button>
-        <button onClick={() => fetchLogsData(LogTimeRange.Day)}>Day</button>
-        <button onClick={() => fetchLogsData(LogTimeRange.Hour)}>Hour</button>
+        <button onClick={() => fetchLogsData(LogTimeRange.Week)}>Semana</button>
+        <button onClick={() => fetchLogsData(LogTimeRange.Day)}>Dia</button>
+        <button onClick={() => fetchLogsData(LogTimeRange.Hour)}>Hora</button>
         {/*<button onClick={() => fetchLogsData(LogTimeRange.Live)}>Live</button>*/}
       </div>
     </div>

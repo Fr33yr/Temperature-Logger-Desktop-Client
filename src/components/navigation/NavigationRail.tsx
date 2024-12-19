@@ -4,9 +4,9 @@ import "./NavigationRail.css";
 
 export default function Navigation() {
   const menuItems = [
-    { id: 1, label: "Servers", path: "/" },
-    { id: 2, label: "Logs", path: "/logs" },
-    { id: 3, label: "Config", path: "/config" },
+    { id: 1, label: "Servidores", path: "/" },
+    { id: 2, label: "Registros", path: "/logs" },
+    { id: 3, label: "Configuracion", path: "/config" },
   ];
   
   return (

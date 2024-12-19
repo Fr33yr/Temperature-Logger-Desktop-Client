@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxhook";
 import {
   addServer,
   deleteServer,
-  IServer,
   IServersInitialState,
   loadServerData,
   selectServer,
@@ -18,7 +17,7 @@ import {
 } from "@tauri-apps/plugin-fs";
 import { error as logError, debug } from "@tauri-apps/plugin-log";
 import { IconButton } from "@mui/material";
-import { StarOutline, Star, Delete } from "@mui/icons-material";
+import { Star, Delete } from "@mui/icons-material";
 
 import "./Server.css";
 
@@ -121,11 +120,11 @@ export default function Servers() {
 
   return (
     <>
-      <h2 className="title">Servers</h2>
+      <h2 className="title">Servidores</h2>
       {isServersEmpty && !showForm ? <NonServerExists /> : ""}
       {!showForm && (
         <button className="addsvbtn" onClick={() => setShowForm(true)}>
-          Add Server
+          Agrega un Servidor
         </button>
       )}
       {!showForm &&
@@ -175,7 +174,7 @@ export default function Servers() {
   function NonServerExists() {
     return (
       <div className="emptylistwarning">
-        <h3>No servers added yet</h3>
+        <h3>Agrega un servidor</h3>
       </div>
     );
   }
@@ -226,7 +225,7 @@ export default function Servers() {
     return (
       <div className="formcontainer">
         <form className="serverform" onSubmit={handleSubmit}>
-          <label htmlFor="name">name</label>
+          <label htmlFor="name">nombre del servidor</label>
           <input
             type="text"
             name="name"
@@ -235,7 +234,7 @@ export default function Servers() {
             onChange={handleChange}
           />
           <span className="formdivider"></span>
-          <label htmlFor="serverurl">server url</label>
+          <label htmlFor="serverurl">url del servidor</label>
           <input
             type="text"
             name="url"
@@ -249,10 +248,10 @@ export default function Servers() {
               className="submitbtn"
               disabled={disableSubmit}
             >
-              Confirm
+              Confirmar
             </button>
             <button className="closebtn" onClick={handleFormCancel}>
-              Cancel
+              Cancelar
             </button>
           </div>
         </form>
