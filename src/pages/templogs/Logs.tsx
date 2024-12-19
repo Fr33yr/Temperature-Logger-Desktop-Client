@@ -138,16 +138,17 @@ export default function Logs() {
         <button onClick={() => fetchLogsData(LogTimeRange.Week)}>Week</button>
         <button onClick={() => fetchLogsData(LogTimeRange.Day)}>Day</button>
         <button onClick={() => fetchLogsData(LogTimeRange.Hour)}>Hour</button>
-        <button onClick={() => fetchLogsData(LogTimeRange.Live)}>Live</button>
+        {/*<button onClick={() => fetchLogsData(LogTimeRange.Live)}>Live</button>*/}
       </div>
     </div>
   );
 
   async function fetchLogsData(logTimeFrame: LogTimeRange) {
     try {
-      const response = await fetch(`${url}templogs`, {
+      const response = await fetch(`${url}${logTimeFrame.toLocaleLowerCase()}`, {
         method: "GET",
       });
+      debug(url)
       if (response.ok) {
         const data = await response.json();
         debug("response ok!");
