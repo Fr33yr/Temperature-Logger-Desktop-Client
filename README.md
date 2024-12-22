@@ -4,6 +4,8 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 
 ---
 
+
+
 ## Table of Contents
 
 - [Features](#features)
@@ -14,6 +16,7 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 
 ---
 
+
 ## Features
 
 - Cross-platform support: Currently only on Windows.
@@ -22,11 +25,13 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 
 ---
 
+
 ## Installation
 
 ```
 yarn add
 ```
+
 
 ### Prerequisites
 
@@ -40,6 +45,7 @@ yarn add
    git clone https://github.com/yourusername/your-tauri-app.git
    cd your-tauri-app
 
+
 ## Usage
 Ensure you have the prerequisites installed.
 Start the application in development mode:
@@ -47,12 +53,14 @@ Start the application in development mode:
 yarn tauri dev
 ```
 
+
 ## Build
 To build the application for production:
 ```
 yarn tauri build
 ```
 The compiled binaries will be located in the `src-tauri/target/release/bundle/nsis` and `src-tauri/target/release/bundle/msi` directories.
+
 
 ### Directory Structure
 ```
