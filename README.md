@@ -51,12 +51,25 @@ yarn tauri dev
 
 ```
 .
-├── src/               # Frontend source code
-├── src-tauri/         # Backend (Tauri-related code)
-├── dist/              # Build output
-├── package.json       # Frontend dependencies
-├── tauri.conf.json    # Tauri configuration
-└── README.md          # This file
+├── .gradle
+├── .idea
+├── .vscode
+├── dist
+├── node_modules
+├── public
+├── src
+│   └── (frontend source code)
+├── src-tauri
+│   └── (Tauri backend code)
+├── .gitignore
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+└── yarn.lock
 
 ```
 
