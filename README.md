@@ -10,7 +10,7 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Development](#development)
 - [Build](#build)
 
 ---
@@ -45,7 +45,7 @@ yarn add
    cd your-tauri-app
 
 
-## Usage
+## Development
 Ensure you have the prerequisites installed.
 Start the application in development mode:
 ```
