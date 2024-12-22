@@ -47,8 +47,14 @@ Start the application in development mode:
 yarn tauri dev
 ```
 
-### Directory Structure
+## Build
+To build the application for production:
+```
+yarn tauri build
+```
+The compiled binaries will be located in the `src-tauri/target/release/bundle/nsis` and `src-tauri/target/release/bundle/msi` directories.
 
+### Directory Structure
 ```
 .
 ├── .gradle
