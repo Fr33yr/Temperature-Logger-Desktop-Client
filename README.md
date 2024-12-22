@@ -24,6 +24,10 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 
 ## Installation
 
+```
+yarn add
+```
+
 ### Prerequisites
 
 1. Install [Node.js](https://nodejs.org/) (LTS recommended).
@@ -35,3 +39,26 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
    ```bash
    git clone https://github.com/yourusername/your-tauri-app.git
    cd your-tauri-app
+
+## Usage
+Ensure you have the prerequisites installed.
+Start the application in development mode:
+```
+yarn tauri dev
+```
+
+### Directory Structure
+
+```
+.
+├── src/               # Frontend source code
+├── src-tauri/         # Backend (Tauri-related code)
+├── dist/              # Build output
+├── package.json       # Frontend dependencies
+├── tauri.conf.json    # Tauri configuration
+└── README.md          # This file
+
+```
+
+
+
