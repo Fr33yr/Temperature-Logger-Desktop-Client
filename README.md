@@ -12,6 +12,7 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 - [Installation](#installation)
 - [Development](#development)
 - [Build](#build)
+- [Usage](#usage)
 
 ---
 
@@ -86,5 +87,7 @@ The compiled binaries will be located in the `src-tauri/target/release/bundle/ns
 
 ```
 
+
+## Usage
 
 
