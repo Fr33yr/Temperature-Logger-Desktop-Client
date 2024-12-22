@@ -11,7 +11,6 @@ A lightweight and fast desktop application built with [Tauri](https://tauri.app/
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Development](#development)
 - [Build](#build)
 
 ---
