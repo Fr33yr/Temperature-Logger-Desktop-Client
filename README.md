@@ -1,8 +1,5 @@
 # NodeMCU Desktop
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20|)]()
-
 A lightweight and fast desktop application built with [Tauri](https://tauri.app/) and [React](https://react.dev).
 
 ---
