@@ -42,7 +42,7 @@ yarn add
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/your-tauri-app.git
+   git clone https://github.com/Fr33yr/NodeMCU_Desktop_Client.git
    cd your-tauri-app
 
 
